@@ -11,8 +11,8 @@ import io
 import re
 from PIL import Image
 
-import gspread
-from oauth2client.service_account import ServiceAccountCredentials
+# import gspread
+# from oauth2client.service_account import ServiceAccountCredentials
 
 # LINE TOKEN
 CHANNEL_ACCESS_TOKEN = "wL3e0IKFdezOLn9xLZEV9Lf1QY4KwoQPOx8yiWD6OKgoSqmZyXfgwogqiKXm8Mw2rta7F3dCYwLs9dBfUv9YRrDUb5nPW57+YuEcsZJJ/FKAy4uVrUeXW303tHtQINHpV+ASj01cymjtpBKw2aFlmQdB04t89/1O/w1cDnyilFU="
@@ -29,11 +29,8 @@ scope = [
     "https://www.googleapis.com/auth/drive"
 ]
 
-creds = ServiceAccountCredentials.from_json_keyfile_name(
-    "credentials.json", scope)
-
-client = gspread.authorize(creds)
-sheet = client.open("LINE OCR DATA").sheet1
+# Google Sheets ปิดชั่วคราว
+sheet = None
 
 
 @app.route("/")
@@ -76,7 +73,7 @@ def handle_image(event):
 
     if numbers:
         for n in numbers:
-            sheet.append_row([n])
+            # sheet.append_row([n])
 
         reply_text = "\n".join(numbers)
 
