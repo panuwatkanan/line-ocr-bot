@@ -1,12 +1,10 @@
-import pytesseract
-
-pytesseract.pytesseract.tesseract_cmd = "/usr/bin/tesseract"
-
 from flask import Flask, request, abort
 from linebot import LineBotApi, WebhookHandler
 from linebot.models import MessageEvent, ImageMessage, TextSendMessage
 
-import pytesseract
+# ❌ ปิด pytesseract ไปก่อน
+# import pytesseract
+
 import cv2
 import numpy as np
 import io
@@ -15,9 +13,6 @@ from PIL import Image
 
 import gspread
 from oauth2client.service_account import ServiceAccountCredentials
-
-# path tesseract
-pytesseract.pytesseract.tesseract_cmd = r"C:\Program Files\Tesseract-OCR\tesseract.exe"
 
 # LINE TOKEN
 CHANNEL_ACCESS_TOKEN = "wL3e0IKFdezOLn9xLZEV9Lf1QY4KwoQPOx8yiWD6OKgoSqmZyXfgwogqiKXm8Mw2rta7F3dCYwLs9dBfUv9YRrDUb5nPW57+YuEcsZJJ/FKAy4uVrUeXW303tHtQINHpV+ASj01cymjtpBKw2aFlmQdB04t89/1O/w1cDnyilFU="
@@ -30,21 +25,24 @@ app = Flask(__name__)
 
 # Google Sheets
 scope = [
-"https://spreadsheets.google.com/feeds",
-"https://www.googleapis.com/auth/drive"
+    "https://spreadsheets.google.com/feeds",
+    "https://www.googleapis.com/auth/drive"
 ]
 
 creds = ServiceAccountCredentials.from_json_keyfile_name(
-"credentials.json", scope)
+    "credentials.json", scope)
 
 client = gspread.authorize(creds)
-
 sheet = client.open("LINE OCR DATA").sheet1
+
+
+@app.route("/")
+def home():
+    return "I'm alive"
 
 
 @app.route("/callback", methods=['POST'])
 def callback():
-
     signature = request.headers['X-Line-Signature']
     body = request.get_data(as_text=True)
 
@@ -59,7 +57,6 @@ def handle_image(event):
     message_content = line_bot_api.get_message_content(event.message.id)
 
     image_bytes = b''
-
     for chunk in message_content.iter_content():
         image_bytes += chunk
 
@@ -67,16 +64,17 @@ def handle_image(event):
 
     img = cv2.cvtColor(np.array(image), cv2.COLOR_BGR2GRAY)
 
-    # เพิ่มความชัด OCR
+    # ปรับภาพ
     img = cv2.threshold(img, 150, 255, cv2.THRESH_BINARY)[1]
 
-    text = pytesseract.image_to_string(img)
+    # ❌ ปิด OCR ชั่วคราว
+    # text = pytesseract.image_to_string(img)
 
-    # หาเลข 7 หลัก
+    text = "1234567 7654321"  # mock test
+
     numbers = re.findall(r'\b\d{7}\b', text)
 
     if numbers:
-
         for n in numbers:
             sheet.append_row([n])
 
@@ -86,9 +84,7 @@ def handle_image(event):
             event.reply_token,
             TextSendMessage(text=reply_text)
         )
-
     else:
-
         line_bot_api.reply_message(
             event.reply_token,
             TextSendMessage(text="ไม่พบตัวเลข")
@@ -96,7 +92,4 @@ def handle_image(event):
 
 
 if __name__ == "__main__":
-    app.run(port=5000)
-@app.route("/")
-def home():
-    return "I'm alive"
+    app.run()
