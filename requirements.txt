@@ -4,6 +4,3 @@ pytesseract
 pillow
 requests
 gunicorn
-flask
-gunicorn
-line-bot-sdk
