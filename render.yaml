@@ -6,6 +6,6 @@ services:
     startCommand: gunicorn app:app
     envVars:
       - key: CHANNEL_ACCESS_TOKEN
-        value: "ใส่ TOKEN ของคุณที่นี่ หรือในหน้าเว็บ Render"
+        value: "wL3e0IKFdezOLn9xLZEV9Lf1QY4KwoQPOx8yiWD6OKgoSqmZyXfgwogqiKXm8Mw2rta7F3dCYwLs9dBfUv9YRrDUb5nPW57+YuEcsZJJ/FKAy4uVrUeXW303tHtQINHpV+ASj01cymjtpBKw2aFlmQdB04t89/1O/w1cDnyilFU="
       - key: CHANNEL_SECRET
-        value: "ใส่ SECRET ของคุณที่นี่"
+        value: "d37d882dab0e0059f4fc23473fe8bd7d"
