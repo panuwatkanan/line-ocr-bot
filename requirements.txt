@@ -4,3 +4,4 @@ pytesseract
 pillow
 requests
 gunicorn
+opencv-python-headless
