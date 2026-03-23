@@ -4,3 +4,8 @@ services:
     runtime: python
     buildCommand: pip install -r requirements.txt
     startCommand: gunicorn app:app
+    envVars:
+      - key: CHANNEL_ACCESS_TOKEN
+        value: "ใส่ TOKEN ของคุณที่นี่ หรือในหน้าเว็บ Render"
+      - key: CHANNEL_SECRET
+        value: "ใส่ SECRET ของคุณที่นี่"
